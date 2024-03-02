@@ -2,6 +2,8 @@ import tkinter as tk
 import os
 import threading
 import time
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from tkinter import ttk
 from recorder import AudioRecorder
@@ -22,6 +24,11 @@ class RecorderApp:
         self.display_panel = tk.Frame(
             self.root, width='950', height='563', bg='blue')
         self.display_panel.grid(row='0', column='1')
+
+        self.figure = plt.figure(figsize=(9.5, 5.63))
+        self.ax = self.figure.add_subplot(111)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.display_panel)
+        self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
         self.control_panel = tk.Frame(self.root, width='1000', height='150')
         self.control_panel.grid(row='1', columnspan='2')
@@ -105,6 +112,17 @@ class RecorderApp:
         if self.WAVReader.get_filename() is None:
             return
         self.WAVReader.read_wav_file()
+
+        audio_data = self.WAVReader.get_audio_data()
+        time = [i/self.WAVReader.get_sample_rate()
+                for i in range(len(audio_data))]
+
+        self.ax.clear()
+        self.ax.plot(time, audio_data, color='b')
+        self.ax.set_title(f"{selected_file}")
+        self.ax.set_axis_off()
+        self.canvas.draw()
+
         self.player.play_sound()
 
     def stop_audio(self):
