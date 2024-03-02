@@ -4,6 +4,8 @@ import threading
 import time
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import subprocess
+
 
 from tkinter import ttk
 from recorder import AudioRecorder
@@ -60,6 +62,10 @@ class RecorderApp:
             "Arial", 25, "bold"), relief='solid', command=self.stop_audio)
         self.stop_button.place(x='195', y='35')
 
+        self.edit_button = tk.Button(self.control_panel, text="✎", font=(
+            "Arial", 25, "bold"), relief='solid', command=self.edit_audio)
+        self.edit_button.place(x='295', y='35')
+
         self.volume = tk.Scale(
             self.control_panel, orient='horizontal', width='25', length='150', from_='0', to='100', command=self.set_volume)
         self.volume.set(1)
@@ -81,6 +87,9 @@ class RecorderApp:
         self.player = SoundPlayer(
             self.WAVReader, self.progress_bar, self.time)
         self.root.mainloop()
+
+    def edit_audio(self):
+        subprocess.Popen(['python' , 'trim_gui.py'])
 
     def load_recorded_files(self):
         recorded_files = [file for file in os.listdir(
