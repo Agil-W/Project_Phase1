@@ -119,9 +119,9 @@ class SoundPlayer:
                 progress += 1
                 if progress % 100 == 0:  # update every 1000 samples
 
-                    print(f'Progress: {progress/self.total_samples*100:.2f}%')
+                    # print(f'Progress: {progress/self.total_samples*100:.2f}%')
                     progress_time = progress / self.wav_reader.get_sample_rate()
-                    print(f'Time: {progress_time:.2f}s')
+                    # print(f'Time: {progress_time:.2f}s')
                     # Update the progress bar
                     self.progress_bar['value'] = progress / \
                         self.total_samples*100

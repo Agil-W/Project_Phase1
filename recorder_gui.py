@@ -10,6 +10,7 @@ import subprocess
 from tkinter import ttk
 from recorder import AudioRecorder
 from playback import SoundPlayer, WAVReader
+from text_convert import TextConvert
 
 
 class RecorderApp:
@@ -131,6 +132,9 @@ class RecorderApp:
         self.ax.set_title(f"{selected_file}")
         self.ax.set_axis_off()
         self.canvas.draw()
+
+        text_converter = TextConvert(f"recorded_files/{selected_file}")
+        threading.Thread(target=text_converter.RecordProcess).start()
 
         self.player.play_sound()
 
